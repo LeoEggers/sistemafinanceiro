@@ -1,5 +1,6 @@
 package com.junio.sistemafinanceiro.service;
 
+import com.junio.sistemafinanceiro.entidades.categoria.Categoria;
 import com.junio.sistemafinanceiro.entidades.lancamento.DadosAtualizarLancamento;
 import com.junio.sistemafinanceiro.entidades.lancamento.DadosCadastroLancamento;
 import com.junio.sistemafinanceiro.entidades.lancamento.Lancamento;
@@ -30,10 +31,18 @@ public class LancamentoService {
         lancamento.setPessoa(ps.findPessoaById(dados.idPessoa()));
 
         // Atribuindo a Categoria
+        Categoria categoria;
         if (dados.idCategoria() != null) {
             CategoriaService cs = new CategoriaService(categoriaRepository);
-            lancamento.setCategoria(cs.findCategoriaById(dados.idCategoria()));
+            categoria = cs.findCategoriaById(dados.idCategoria());
+        } else if (dados.categoria() != null) {
+            CategoriaService cs = new CategoriaService(categoriaRepository);
+            categoria = cs.createCategoria(dados.categoria());
+        } else {
+            throw new IllegalArgumentException("Categoria não informada para o lançamento.");
         }
+
+        lancamento.setCategoria(categoria);
 
         return lancamentoRepository.save(lancamento);
     }

@@ -1,5 +1,6 @@
 package com.junio.sistemafinanceiro.entidades.lancamento;
 
+import com.junio.sistemafinanceiro.entidades.categoria.DadosCadastroCategoria;
 import com.junio.sistemafinanceiro.enums.TipoLancamento;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -14,6 +15,7 @@ public record DadosCadastroLancamento(
         TipoLancamento tipoLancamento,
         @NotNull
         Long idPessoa,
-        Long idCategoria
+        Long idCategoria,
+        DadosCadastroCategoria categoria
 ) {
 }

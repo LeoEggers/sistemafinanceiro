@@ -1,6 +1,7 @@
 package com.junio.sistemafinanceiro.service;
 
 import com.junio.sistemafinanceiro.entidades.categoria.Categoria;
+import com.junio.sistemafinanceiro.entidades.categoria.DadosCadastroCategoria;
 import com.junio.sistemafinanceiro.repositories.CategoriaRepository;
 import com.junio.sistemafinanceiro.entidades.categoria.DadosAtualizarCategoria;
 import lombok.AllArgsConstructor;
@@ -16,7 +17,8 @@ public class CategoriaService {
     private final CategoriaRepository categoriaRepository;
 
     // Create
-    public Categoria createCategoria(Categoria categoria) {
+    public Categoria createCategoria(DadosCadastroCategoria dados) {
+        Categoria categoria = new Categoria(dados);
         return categoriaRepository.save(categoria);
     }
 

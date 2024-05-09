@@ -1,0 +1,42 @@
+post pessoa:
+
+{
+  "nome": "João da Silva",
+  "endereco": {
+    "logradouro": "Rua das Flores",
+    "bairro": "Centro",
+    "cep": "12345-678",
+    "complemento": "Apartamento 101",
+    "numero": "123",
+    "uf": "SP",
+    "cidade": "São Paulo"
+  }
+}
+
+post categoria:
+
+{
+	"nome": "Lazer"
+}
+
+post lançamento:
+
+    por idCategoria:
+    {
+      "descricao": "Compra de livros",
+      "observacao": "Livros de ficção",
+      "valor": 50.00,
+      "tipoLancamento": "DESPESA",
+      "idPessoa": 1,
+      "idCategoria": 1
+    }
+
+    por categoria:
+        {
+          "descricao": "Compra de Remédios",
+          "observacao": "Ibuprofeno",
+          "valor": 10.00,
+          "tipoLancamento": "DESPESA",
+          "idPessoa": 1,
+          "Categoria": "Saúde"
+        }

@@ -20,8 +20,7 @@ public class ControllerCategoria {
 
     @PostMapping
     public ResponseEntity<Categoria> cadastrarCategoria(@RequestBody @Valid DadosCadastroCategoria dados) {
-        Categoria categoria = new Categoria(dados);
-        categoria = categoriaService.createCategoria(categoria);
+        var categoria = categoriaService.createCategoria(dados);
         return ResponseEntity.ok(categoria);
     }
 
