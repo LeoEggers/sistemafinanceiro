@@ -1,7 +1,7 @@
 package com.junio.sistemafinanceiro.entidades.lancamento;
 
 import com.junio.sistemafinanceiro.entidades.categoria.DadosCadastroCategoria;
-import com.junio.sistemafinanceiro.enums.TipoLancamento;
+import com.junio.sistemafinanceiro.entidades.lancamento.enums.TipoLancamento;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 

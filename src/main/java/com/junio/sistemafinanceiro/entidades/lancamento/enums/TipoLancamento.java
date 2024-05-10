@@ -1,4 +1,4 @@
-package com.junio.sistemafinanceiro.enums;
+package com.junio.sistemafinanceiro.entidades.lancamento.enums;
 
 public enum TipoLancamento {
 

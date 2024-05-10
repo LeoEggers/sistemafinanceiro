@@ -3,9 +3,10 @@ package com.junio.sistemafinanceiro.entidades.lancamento;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.junio.sistemafinanceiro.entidades.categoria.Categoria;
-import com.junio.sistemafinanceiro.enums.TipoLancamento;
+import com.junio.sistemafinanceiro.entidades.lancamento.enums.TipoLancamento;
 import com.junio.sistemafinanceiro.entidades.pessoa.Pessoa;
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,6 +18,7 @@ import java.time.ZoneId;
 @Table(name = "Lançamentos")
 @NoArgsConstructor
 @Getter @Setter
+@EqualsAndHashCode(of = "id")
 public class Lancamento {
 
     @Id

@@ -37,8 +37,8 @@ public class ControllerLancamento {
         return ResponseEntity.ok().body(lancamento);
     }
 
-    @PutMapping
-    public ResponseEntity<Lancamento> updateLancamento(@RequestParam Long id,
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<Lancamento> updateLancamento(@PathVariable Long id,
                                                        @RequestBody @Valid DadosAtualizarLancamento dados) {
         Lancamento lancamento = lancamentoService.updateLancamento(id, dados);
         return ResponseEntity.ok().body(lancamento);

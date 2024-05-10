@@ -42,7 +42,7 @@ public class PessoaService {
         }
 
         if (dados.endereco() != null) {
-            Endereco endereco = new Endereco();
+            Endereco endereco = pessoa.getEndereco();
 
             if (dados.endereco().getLogradouro() != null) {
                 endereco.setLogradouro(dados.endereco().getLogradouro());

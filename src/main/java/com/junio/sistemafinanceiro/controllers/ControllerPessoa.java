@@ -36,8 +36,8 @@ public class ControllerPessoa {
         return ResponseEntity.ok().body(pessoa);
     }
 
-    @PutMapping
-    public ResponseEntity<Pessoa> updatePessoa(@RequestParam Long id,
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<Pessoa> updatePessoa(@PathVariable Long id,
                                                @RequestBody @Valid DadosAtualizarPessoa dados) {
         Pessoa pessoa = pessoaService.updatePessoa(id, dados);
         return ResponseEntity.ok().body(pessoa);
