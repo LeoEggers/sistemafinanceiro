@@ -1,7 +1,6 @@
 package com.junio.sistemafinanceiro.entidades.categoria;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.junio.sistemafinanceiro.entidades.lancamento.Lancamento;
 import jakarta.persistence.*;
 import lombok.*;
 

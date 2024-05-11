@@ -8,7 +8,9 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -19,10 +21,11 @@ public class ControllerLancamento {
     private final LancamentoService lancamentoService;
 
     @PostMapping
-    public ResponseEntity<Lancamento> cadastrarLancamento
-            (@RequestBody @Valid DadosCadastroLancamento dados) {
+    public ResponseEntity<Lancamento> cadastrarLancamento(@RequestBody @Valid DadosCadastroLancamento dados) {
         Lancamento lancamento = lancamentoService.createLancamento(dados);
-        return ResponseEntity.ok(lancamento);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(lancamento.getId()).toUri();
+        return ResponseEntity.created(uri).body(lancamento);
     }
 
     @GetMapping
@@ -44,8 +47,8 @@ public class ControllerLancamento {
         return ResponseEntity.ok().body(lancamento);
     }
 
-    @DeleteMapping
-    public ResponseEntity<Void> deleteLancamento(@RequestParam Long id) {
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> deleteLancamento(@PathVariable Long id) {
         lancamentoService.deleteLogicoLancamento(id);
         return ResponseEntity.noContent().build();
     }

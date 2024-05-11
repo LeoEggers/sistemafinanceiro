@@ -8,7 +8,9 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -21,7 +23,9 @@ public class ControllerCategoria {
     @PostMapping
     public ResponseEntity<Categoria> cadastrarCategoria(@RequestBody @Valid DadosCadastroCategoria dados) {
         var categoria = categoriaService.createCategoria(dados);
-        return ResponseEntity.ok(categoria);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(categoria.getId()).toUri();
+        return ResponseEntity.created(uri).body(categoria);
     }
 
     @GetMapping
@@ -43,8 +47,8 @@ public class ControllerCategoria {
         return ResponseEntity.ok().body(categoria);
     }
 
-    @DeleteMapping
-    public ResponseEntity<Void> deleteCategoria(@RequestParam Long id) {
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> deleteCategoria(@PathVariable Long id) {
         categoriaService.deleteLogicoCategoria(id);
         return ResponseEntity.noContent().build();
     }

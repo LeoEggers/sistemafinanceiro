@@ -5,6 +5,7 @@ import com.junio.sistemafinanceiro.entidades.pessoa.DadosAtualizarPessoa;
 import com.junio.sistemafinanceiro.entidades.pessoa.DadosCadastroPessoa;
 import com.junio.sistemafinanceiro.entidades.pessoa.Pessoa;
 import com.junio.sistemafinanceiro.repositories.PessoaRepository;
+import com.junio.sistemafinanceiro.service.exceptions.DadoInvalidoException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,55 +26,62 @@ public class PessoaService {
 
     // Read
     public List<Pessoa> findAllPessoas() {
-        return pessoaRepository.findAll();
+        return pessoaRepository.findAllByAtivoIsTrue();
     }
 
     public Pessoa findPessoaById(Long id) {
-        Optional<Pessoa> pessoa = pessoaRepository.findById(id);
+        Optional<Pessoa> pessoa = pessoaRepository.findByIdAndAtivoIsTrue(id);
         return pessoa.orElseThrow();
     }
 
     // Update
     public Pessoa updatePessoa(Long id, DadosAtualizarPessoa dados) {
+
+        System.out.println("Entrou no método atualizar");
         var pessoa = findPessoaById(id);
 
         if (dados.nome() != null) {
             pessoa.setNome(dados.nome());
         }
 
-        if (dados.endereco() != null) {
-            Endereco endereco = pessoa.getEndereco();
+        Endereco endereco = pessoa.getEndereco();
 
-            if (dados.endereco().getLogradouro() != null) {
-                endereco.setLogradouro(dados.endereco().getLogradouro());
+        if (dados.logradouro() != null) {
+            if (!dados.logradouro().isBlank()) {
+                endereco.setLogradouro(dados.logradouro());
+                System.out.println(dados.logradouro());
+                System.out.println("ta dizendo que nãp é blank");
+            } else {
+                System.out.println("ta dizendo que ta branco");
+                throw new DadoInvalidoException(dados.logradouro());
             }
-
-            if (dados.endereco().getBairro() != null) {
-                endereco.setBairro(dados.endereco().getBairro());
-            }
-
-            if (dados.endereco().getCep() != null) {
-                endereco.setCep(dados.endereco().getCep());
-            }
-
-            if (dados.endereco().getNumero() != null) {
-                endereco.setNumero(dados.endereco().getNumero());
-            }
-
-            if (dados.endereco().getComplemento() != null) {
-                endereco.setComplemento(dados.endereco().getComplemento());
-            }
-
-            if (dados.endereco().getCidade() != null) {
-                endereco.setCidade(dados.endereco().getCidade());
-            }
-
-            if (dados.endereco().getUf() != null) {
-                endereco.setUf(dados.endereco().getUf());
-            }
-
-            pessoa.setEndereco(endereco);
         }
+
+        if (dados.bairro() != null) {
+            endereco.setBairro(dados.bairro());
+        }
+
+        if (dados.cep() != null) {
+            endereco.setCep(dados.cep());
+        }
+
+        if (dados.numero() != null) {
+            endereco.setNumero(dados.numero());
+        }
+
+        if (dados.complemento() != null) {
+            endereco.setComplemento(dados.complemento());
+        }
+
+        if (dados.cidade() != null) {
+            endereco.setCidade(dados.cidade());
+        }
+
+        if (dados.uf() != null) {
+            endereco.setUf(dados.uf());
+        }
+
+        pessoa.setEndereco(endereco);
 
         return pessoaRepository.save(pessoa);
     }
@@ -82,5 +90,6 @@ public class PessoaService {
     public void deleteLogicoPessoa(Long id) {
         Pessoa pessoa = findPessoaById(id);
         pessoa.setAtivo(false);
+        pessoaRepository.save(pessoa);
     }
 }

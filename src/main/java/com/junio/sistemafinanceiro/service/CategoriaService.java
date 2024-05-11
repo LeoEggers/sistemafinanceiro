@@ -4,6 +4,7 @@ import com.junio.sistemafinanceiro.entidades.categoria.Categoria;
 import com.junio.sistemafinanceiro.entidades.categoria.DadosCadastroCategoria;
 import com.junio.sistemafinanceiro.repositories.CategoriaRepository;
 import com.junio.sistemafinanceiro.entidades.categoria.DadosAtualizarCategoria;
+import com.junio.sistemafinanceiro.service.exceptions.CategoriaJaExistenteException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,19 +19,26 @@ public class CategoriaService {
 
     // Create
     public Categoria createCategoria(DadosCadastroCategoria dados) {
+        String nome = dados.nome();
+
+        if (categoriaRepository.existsByNome(nome)) {
+            throw new CategoriaJaExistenteException();
+        }
+
         Categoria categoria = new Categoria(dados);
         return categoriaRepository.save(categoria);
     }
 
     // Read
     public List<Categoria> findAllCategorias() {
-        return categoriaRepository.findAll();
+        return categoriaRepository.findAllByAtivoIsTrue();
     }
 
     public Categoria findCategoriaById(Long id) {
-        Optional<Categoria> categoria = categoriaRepository.findById(id);
+        Optional<Categoria> categoria = categoriaRepository.findByIdAndAtivoIsTrue(id);
         return categoria.orElseThrow();
     }
+
 
     // Update
     public Categoria updateCategoria(Long id, DadosAtualizarCategoria dados) {
@@ -47,5 +55,6 @@ public class CategoriaService {
     public void deleteLogicoCategoria(Long id) {
         Categoria categoria = findCategoriaById(id);
         categoria.setAtivo(false);
+        categoriaRepository.save(categoria);
     }
 }

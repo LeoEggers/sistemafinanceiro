@@ -38,11 +38,11 @@ public class LancamentoService {
 
     // Read
     public List<Lancamento> findAllLancamentos() {
-        return lancamentoRepository.findAll();
+        return lancamentoRepository.findAllByAtivoIsTrue();
     }
 
     public Lancamento findLancamentoById(Long id) {
-        Optional<Lancamento> lancamento = lancamentoRepository.findById(id);
+        Optional<Lancamento> lancamento = lancamentoRepository.findByIdAndAtivoIsTrue(id);
         return lancamento.orElseThrow();
     }
 
@@ -82,5 +82,6 @@ public class LancamentoService {
     public void deleteLogicoLancamento(Long id) {
         Lancamento lancamento = findLancamentoById(id);
         lancamento.setAtivo(false);
+        lancamentoRepository.save(lancamento);
     }
 }

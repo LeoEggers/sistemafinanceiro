@@ -8,7 +8,9 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -21,7 +23,9 @@ public class ControllerPessoa {
     @PostMapping
     public ResponseEntity<Pessoa> cadastrarPessoa(@RequestBody @Valid DadosCadastroPessoa dados) {
         var pessoa = pessoaService.createPessoa(dados);
-        return ResponseEntity.ok(pessoa);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(pessoa.getId()).toUri();
+        return ResponseEntity.created(uri).body(pessoa);
     }
 
     @GetMapping
@@ -43,8 +47,8 @@ public class ControllerPessoa {
         return ResponseEntity.ok().body(pessoa);
     }
 
-    @DeleteMapping
-    public ResponseEntity<Void> deletePessoa(@RequestParam Long id) {
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> deletePessoa(@PathVariable Long id) {
         pessoaService.deleteLogicoPessoa(id);
         return ResponseEntity.noContent().build();
     }
