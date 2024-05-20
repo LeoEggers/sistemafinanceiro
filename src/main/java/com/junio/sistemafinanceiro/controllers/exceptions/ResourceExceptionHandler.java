@@ -1,43 +1,58 @@
-//package com.junio.sistemafinanceiro.controllers.exceptions;
-//
-//import com.junio.sistemafinanceiro.service.exceptions.DatabaseException;
-//import com.junio.sistemafinanceiro.service.exceptions.ResourceNotFoundException;
-//import jakarta.servlet.http.HttpServletRequest;
-//import org.springframework.http.HttpStatus;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.web.bind.annotation.ControllerAdvice;
-//import org.springframework.web.bind.annotation.ExceptionHandler;
-//
-//import java.time.Instant;
-//
-//@ControllerAdvice
-//public class ResourceExceptionHandler {
-//
-//    @ExceptionHandler(Exception.class)
-//    public ResponseEntity<StandardError> handleException(Exception e, HttpServletRequest request) {
-//
-//        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
-//        String mensagemDeErro = "Internal server error";
-//
-//        if (e instanceof ResourceNotFoundException) {
-//            status = HttpStatus.NOT_FOUND;
-//            mensagemDeErro = "Recurso não encontrado";
-//        } else if (e instanceof DatabaseException) {
-//            status = HttpStatus.BAD_REQUEST;
-//            mensagemDeErro = "Violação da Integridade do Banco de Dados";
-//        }
-//
-//        StandardError error = new StandardError(Instant.now(),
-//                status.value(),
-//                mensagemDeErro,
-//                e.getMessage(),
-//                request.getRequestURI());
-//
-//        return ResponseEntity.status(status).body(error);
-//    }
-//}
+package com.junio.sistemafinanceiro.controllers.exceptions;
 
-// todo:
-//  java.sql.SQLIntegrityConstraintViolationException: Column 'logradouro' cannot be null
-//  com.mysql.cj.jdbc.exceptions.MysqlDataTruncation: Data truncation: Data too long for column 'cep' at row 1
-//  org.springframework.dao.DataIntegrityViolationException: could not execute statement [Data truncation: Data too long for column 'cep' at row 1]
+import com.junio.sistemafinanceiro.service.exceptions.DatabaseException;
+import com.junio.sistemafinanceiro.service.exceptions.ResourceNotFoundException;
+import com.junio.sistemafinanceiro.service.exceptions.DadoInvalidoException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.UnexpectedTypeException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import java.sql.SQLIntegrityConstraintViolationException;
+import java.time.Instant;
+
+@ControllerAdvice
+public class ResourceExceptionHandler {
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<StandardError> handleException(Exception e, HttpServletRequest request) {
+
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+        String mensagemDeErro = "Internal server error";
+
+        if (e instanceof ResourceNotFoundException) {
+            status = HttpStatus.NOT_FOUND;
+            mensagemDeErro = "Recurso não encontrado";
+        } else if (e instanceof DatabaseException) {
+            status = HttpStatus.BAD_REQUEST;
+            mensagemDeErro = "Violação da Integridade do Banco de Dados";
+        } else if (e instanceof SQLIntegrityConstraintViolationException) {
+            status = HttpStatus.BAD_REQUEST;
+            mensagemDeErro = "Violação de restrição de integridade do banco de dados";
+        } else if (e instanceof DataIntegrityViolationException) {
+            status = HttpStatus.BAD_REQUEST;
+            mensagemDeErro = "Violação de integridade de dados";
+        } else if (e instanceof MethodArgumentNotValidException) {
+            status = HttpStatus.BAD_REQUEST;
+            mensagemDeErro = "Dados inconsistentes com o formato ou tamanho permitido para a coluna";
+        } else if (e instanceof DadoInvalidoException) {
+            status = HttpStatus.BAD_REQUEST;
+            mensagemDeErro = "Dados inválidos fornecidos";
+        } else if (e instanceof UnexpectedTypeException) {
+            status = HttpStatus.BAD_REQUEST;
+            mensagemDeErro = "Tipo de dado inesperado fornecido";
+        }
+
+        StandardError error = new StandardError(Instant.now(),
+                status.value(),
+                mensagemDeErro,
+                e.getMessage(),
+                request.getRequestURI());
+
+        return ResponseEntity.status(status).body(error);
+    }
+}

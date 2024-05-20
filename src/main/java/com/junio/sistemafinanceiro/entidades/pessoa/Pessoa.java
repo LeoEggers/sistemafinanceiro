@@ -1,7 +1,7 @@
 package com.junio.sistemafinanceiro.entidades.pessoa;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.junio.sistemafinanceiro.entidades.endereco.Endereco;
+import com.junio.sistemafinanceiro.entidades.pessoa.endereco.Endereco;
 import com.junio.sistemafinanceiro.entidades.lancamento.Lancamento;
 import jakarta.persistence.*;
 import lombok.*;

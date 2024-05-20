@@ -1,5 +1,6 @@
-package com.junio.sistemafinanceiro.entidades.endereco;
+package com.junio.sistemafinanceiro.entidades.pessoa.endereco;
 
+import com.junio.sistemafinanceiro.entidades.pessoa.endereco.enums.UnidadeFederativa;
 import jakarta.persistence.Embeddable;
 import lombok.*;
 
@@ -15,7 +16,7 @@ public class Endereco {
     private String numero;
     private String complemento;
     private String cidade;
-    private String uf;
+    private UnidadeFederativa uf;
 
     public Endereco(DadosEndereco dados) {
         this.logradouro = dados.logradouro();

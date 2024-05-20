@@ -5,7 +5,9 @@ import com.junio.sistemafinanceiro.entidades.categoria.DadosCadastroCategoria;
 import com.junio.sistemafinanceiro.repositories.CategoriaRepository;
 import com.junio.sistemafinanceiro.entidades.categoria.DadosAtualizarCategoria;
 import com.junio.sistemafinanceiro.service.exceptions.CategoriaJaExistenteException;
+import com.junio.sistemafinanceiro.service.exceptions.DadoInvalidoException;
 import lombok.AllArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -44,8 +46,10 @@ public class CategoriaService {
     public Categoria updateCategoria(Long id, DadosAtualizarCategoria dados) {
         Categoria categoria = findCategoriaById(id);
 
-        if (dados.nome() != null) {
+        if (StringUtils.isNotBlank(dados.nome())) {
             categoria.setNome(dados.nome());
+        } else if (dados.nome() != null){
+            throw new DadoInvalidoException("Nome não pode ser vazio.");
         }
 
         return categoriaRepository.save(categoria);

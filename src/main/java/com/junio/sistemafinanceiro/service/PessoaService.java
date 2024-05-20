@@ -1,12 +1,13 @@
 package com.junio.sistemafinanceiro.service;
 
-import com.junio.sistemafinanceiro.entidades.endereco.Endereco;
+import com.junio.sistemafinanceiro.entidades.pessoa.endereco.Endereco;
 import com.junio.sistemafinanceiro.entidades.pessoa.DadosAtualizarPessoa;
 import com.junio.sistemafinanceiro.entidades.pessoa.DadosCadastroPessoa;
 import com.junio.sistemafinanceiro.entidades.pessoa.Pessoa;
 import com.junio.sistemafinanceiro.repositories.PessoaRepository;
 import com.junio.sistemafinanceiro.service.exceptions.DadoInvalidoException;
 import lombok.AllArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class PessoaService {
 
-    private PessoaRepository pessoaRepository;
+    private final PessoaRepository pessoaRepository;
 
     // Create
     public Pessoa createPessoa(DadosCadastroPessoa dados) {
@@ -36,52 +37,73 @@ public class PessoaService {
 
     // Update
     public Pessoa updatePessoa(Long id, DadosAtualizarPessoa dados) {
-
-        System.out.println("Entrou no método atualizar");
         var pessoa = findPessoaById(id);
 
-        if (dados.nome() != null) {
+        // atualizando Nome
+        if (StringUtils.isNotBlank(dados.nome())) {
+            if (dados.nome().length() < 3 || dados.nome().length() > 100) {
+                throw new DadoInvalidoException("Nome deve ter entre 3 e 100 caracteres");
+            }
             pessoa.setNome(dados.nome());
+        } else if (dados.nome() != null) {
+            throw new DadoInvalidoException("Nome não pode ser vazio");
         }
 
         Endereco endereco = pessoa.getEndereco();
 
-        if (dados.logradouro() != null) {
-            if (!dados.logradouro().isBlank()) {
-                endereco.setLogradouro(dados.logradouro());
-                System.out.println(dados.logradouro());
-                System.out.println("ta dizendo que nãp é blank");
-            } else {
-                System.out.println("ta dizendo que ta branco");
-                throw new DadoInvalidoException(dados.logradouro());
+        if (dados.endereco() != null) {
+
+            // atualizando Logradouro
+            if (StringUtils.isNotBlank(dados.endereco().getLogradouro())) {
+                endereco.setLogradouro(dados.endereco().getLogradouro());
+            } else if (dados.endereco().getLogradouro() != null) {
+                throw new DadoInvalidoException("Logradouro não pode ser vazio");
             }
-        }
 
-        if (dados.bairro() != null) {
-            endereco.setBairro(dados.bairro());
-        }
+            // atualizando Bairro
+            if (StringUtils.isNotBlank(dados.endereco().getBairro())) {
+                endereco.setBairro(dados.endereco().getBairro());
+            } else if (dados.endereco().getBairro() != null) {
+                throw new DadoInvalidoException("Bairro não pode ser vazio");
+            }
 
-        if (dados.cep() != null) {
-            endereco.setCep(dados.cep());
-        }
+            // atualizando CEP
+            if (StringUtils.isNotBlank(dados.endereco().getCep())) {
+                if (!dados.endereco().getCep().matches("^[0-9]{8}$")) {
+                    throw new DadoInvalidoException("CEP inválido.");
+                }
+                endereco.setCep(dados.endereco().getCep());
+            } else if (dados.endereco().getCep() != null) {
+                throw new DadoInvalidoException("CEP não pode ser vazio");
+            }
 
-        if (dados.numero() != null) {
-            endereco.setNumero(dados.numero());
-        }
+            // atualizando Número
+            if (StringUtils.isNotBlank(dados.endereco().getNumero())) {
+                endereco.setNumero(dados.endereco().getNumero());
+            } else if (dados.endereco().getNumero() != null) {
+                throw new DadoInvalidoException("Número não pode ser vazio");
+            }
 
-        if (dados.complemento() != null) {
-            endereco.setComplemento(dados.complemento());
-        }
+            // atualizando Complemento
+            if (StringUtils.isNotBlank(dados.endereco().getComplemento())) {
+                endereco.setComplemento(dados.endereco().getComplemento());
+            } else if (dados.endereco().getComplemento() != null) {
+                throw new DadoInvalidoException("Complemento não pode ser vazio");
+            }
 
-        if (dados.cidade() != null) {
-            endereco.setCidade(dados.cidade());
-        }
+            // atualizando Cidade
+            if (StringUtils.isNotBlank(dados.endereco().getCidade())) {
+                endereco.setCidade(dados.endereco().getCidade());
+            } else if (dados.endereco().getCidade() != null) {
+                throw new DadoInvalidoException("Cidade não pode ser vazio");
+            }
 
-        if (dados.uf() != null) {
-            endereco.setUf(dados.uf());
+            // atualizando UF
+            if (dados.endereco().getUf() != null) {
+                endereco.setUf(dados.endereco().getUf());
+            }
+            pessoa.setEndereco(endereco);
         }
-
-        pessoa.setEndereco(endereco);
 
         return pessoaRepository.save(pessoa);
     }
