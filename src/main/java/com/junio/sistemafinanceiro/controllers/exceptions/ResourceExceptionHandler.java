@@ -13,9 +13,13 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.Instant;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @ControllerAdvice
 public class ResourceExceptionHandler {
+
+    private static final Logger logger = LoggerFactory.getLogger(ResourceExceptionHandler.class);
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<StandardError> handleException(Exception e, HttpServletRequest request) {
@@ -52,10 +56,13 @@ public class ResourceExceptionHandler {
             mensagemDeErro = "Tipo de dado inesperado fornecido";
         }
 
+        // Logar o stack trace completo para fins de depuração
+        logger.error("Error: ", e);
+
         StandardError error = new StandardError(Instant.now(),
                 status.value(),
-                mensagemDeErro,
-                e.getMessage(),
+                mensagemDeErro, // mensagem de erro amigável
+                null, // não incluir e.getMessage() para evitar exposição de detalhes internos
                 request.getRequestURI());
 
         return ResponseEntity.status(status).body(error);

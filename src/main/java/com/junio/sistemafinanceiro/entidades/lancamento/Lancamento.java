@@ -99,11 +99,7 @@ public class Lancamento {
 
         if (dados.transacaoConcluida() != null){
             this.setTransacaoConcluida(dados.transacaoConcluida());
-            if (dados.transacaoConcluida()) {
-                this.setDataConclusao(Instant.now());
-            } else {
-                this.setDataConclusao(null);
-            }
+            this.dataConclusao = this.transacaoConcluida ? Instant.now() : null;
         }
     }
 }
