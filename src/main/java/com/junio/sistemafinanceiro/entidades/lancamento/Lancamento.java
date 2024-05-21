@@ -5,11 +5,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.junio.sistemafinanceiro.entidades.categoria.Categoria;
 import com.junio.sistemafinanceiro.entidades.lancamento.enums.TipoLancamento;
 import com.junio.sistemafinanceiro.entidades.pessoa.Pessoa;
+import com.junio.sistemafinanceiro.service.exceptions.DadoInvalidoException;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -35,6 +37,10 @@ public class Lancamento {
             pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'",
             timezone = "GMT")
     private Instant dataVencimento;
+    @JsonFormat(shape = JsonFormat.Shape.STRING,
+            pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'",
+            timezone = "GMT")
+    private Instant dataConclusao;
     @ManyToOne
     private Categoria categoria = new Categoria();
     @Enumerated(EnumType.STRING)
@@ -44,6 +50,7 @@ public class Lancamento {
     private Pessoa pessoa;
     @JsonIgnore
     private Boolean ativo;
+    private Boolean transacaoConcluida = false;
 
     public Lancamento(DadosCadastroLancamento dados) {
         this.ativo = true;
@@ -53,6 +60,50 @@ public class Lancamento {
         this.tipoLancamento = dados.tipoLancamento();
 
         this.dataLancamento = Instant.now();
-        this.dataVencimento = this.dataLancamento.atZone(ZoneId.systemDefault()).plusDays(30).toInstant();
+        this.dataVencimento = this.dataLancamento.atZone(ZoneId.systemDefault()).plusDays(dados.diasParaOVencimento()).toInstant();
+        this.dataConclusao = dados.transacaoConcluida() ? Instant.now() : null;
+    }
+
+    public void atualizarLancamento(DadosAtualizarLancamento dados){
+        if (StringUtils.isNotBlank(dados.descricao())) {
+            this.setDescricao(dados.descricao());
+        } else if (dados.descricao() != null) {
+            throw new DadoInvalidoException("Descrição não pode ser vazia");
+        }
+
+        if (StringUtils.isNotBlank(dados.observacao())) {
+            this.setObservacao(dados.observacao());
+        } else if (dados.observacao() != null) {
+            throw new DadoInvalidoException("Observação não pode ser vazia");
+        }
+
+        if (dados.valor() != null) {
+            this.setValor(dados.valor());
+        }
+
+        if (dados.dataLancamento() != null) {
+            this.setDataLancamento(dados.dataLancamento());
+        }
+
+        if (dados.dataVencimento() != null) {
+            this.setDataVencimento(dados.dataVencimento());
+        }
+
+        if (dados.dataConclusao() != null) {
+            this.setDataConclusao(dados.dataConclusao());
+        }
+
+        if (dados.categoria() != null) {
+            this.setCategoria(dados.categoria());
+        }
+
+        if (dados.transacaoConcluida() != null){
+            this.setTransacaoConcluida(dados.transacaoConcluida());
+            if (dados.transacaoConcluida()) {
+                this.setDataConclusao(Instant.now());
+            } else {
+                this.setDataConclusao(null);
+            }
+        }
     }
 }

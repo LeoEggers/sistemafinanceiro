@@ -10,6 +10,8 @@ public record DadosAtualizarLancamento(
         Double valor,
         Instant dataLancamento,
         Instant dataVencimento,
-        Categoria categoria
+        Instant dataConclusao,
+        Categoria categoria,
+        Boolean transacaoConcluida
 ) {
 }

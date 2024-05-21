@@ -6,9 +6,7 @@ import com.junio.sistemafinanceiro.entidades.lancamento.Lancamento;
 import com.junio.sistemafinanceiro.repositories.CategoriaRepository;
 import com.junio.sistemafinanceiro.repositories.LancamentoRepository;
 import com.junio.sistemafinanceiro.repositories.PessoaRepository;
-import com.junio.sistemafinanceiro.service.exceptions.DadoInvalidoException;
 import lombok.AllArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -51,35 +49,7 @@ public class LancamentoService {
     // Update
     public Lancamento updateLancamento(Long id, DadosAtualizarLancamento dados) {
         Lancamento lancamento = findLancamentoById(id);
-
-        if (StringUtils.isNotBlank(dados.descricao())) {
-            lancamento.setDescricao(dados.descricao());
-        } else if (dados.descricao() != null) {
-            throw new DadoInvalidoException("Descrição não pode ser vazia");
-        }
-
-        if (StringUtils.isNotBlank(dados.observacao())) {
-            lancamento.setObservacao(dados.observacao());
-        } else if (dados.observacao() != null) {
-            throw new DadoInvalidoException("Observação não pode ser vazia");
-        }
-
-        if (dados.valor() != null) {
-            lancamento.setValor(dados.valor());
-        }
-
-        if (dados.dataLancamento() != null) {
-            lancamento.setDataLancamento(dados.dataLancamento());
-        }
-
-        if (dados.dataVencimento() != null) {
-            lancamento.setDataVencimento(dados.dataVencimento());
-        }
-
-        if (dados.categoria() != null) {
-            lancamento.setCategoria(dados.categoria());
-        }
-
+        lancamento.atualizarLancamento(dados);
         return lancamentoRepository.save(lancamento);
     }
 

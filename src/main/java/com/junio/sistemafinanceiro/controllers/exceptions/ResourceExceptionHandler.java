@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.Instant;
 
@@ -27,21 +26,27 @@ public class ResourceExceptionHandler {
         if (e instanceof ResourceNotFoundException) {
             status = HttpStatus.NOT_FOUND;
             mensagemDeErro = "Recurso não encontrado";
+
         } else if (e instanceof DatabaseException) {
             status = HttpStatus.BAD_REQUEST;
             mensagemDeErro = "Violação da Integridade do Banco de Dados";
+
         } else if (e instanceof SQLIntegrityConstraintViolationException) {
             status = HttpStatus.BAD_REQUEST;
             mensagemDeErro = "Violação de restrição de integridade do banco de dados";
+
         } else if (e instanceof DataIntegrityViolationException) {
             status = HttpStatus.BAD_REQUEST;
             mensagemDeErro = "Violação de integridade de dados";
+
         } else if (e instanceof MethodArgumentNotValidException) {
             status = HttpStatus.BAD_REQUEST;
             mensagemDeErro = "Dados inconsistentes com o formato ou tamanho permitido para a coluna";
+
         } else if (e instanceof DadoInvalidoException) {
             status = HttpStatus.BAD_REQUEST;
             mensagemDeErro = "Dados inválidos fornecidos";
+
         } else if (e instanceof UnexpectedTypeException) {
             status = HttpStatus.BAD_REQUEST;
             mensagemDeErro = "Tipo de dado inesperado fornecido";

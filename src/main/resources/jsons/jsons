@@ -16,7 +16,7 @@ post pessoa:
 post categoria:
 
     {
-        "nome": "Lazer"
+      "nome": "Lazer"
     }
 
 post lançamento:
@@ -27,5 +27,8 @@ post lançamento:
       "valor": 50.00,
       "tipoLancamento": "DESPESA",
       "idPessoa": 1,
-      "idCategoria": 1
+      "idCategoria": 1,
+      "diasParaOVencimento": 30,
+      "transacaoConcluida": false
     }
+
