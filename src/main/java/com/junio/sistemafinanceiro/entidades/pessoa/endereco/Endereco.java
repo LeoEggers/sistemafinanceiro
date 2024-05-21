@@ -16,7 +16,7 @@ public class Endereco {
     private String numero;
     private String complemento;
     private String cidade;
-    private UnidadeFederativa uf;
+    private String uf;
 
     public Endereco(DadosEndereco dados) {
         this.logradouro = dados.logradouro();
@@ -25,6 +25,6 @@ public class Endereco {
         this.numero = dados.numero();
         this.complemento = dados.complemento();
         this.cidade = dados.cidade();
-        this.uf = dados.uf();
+        this.uf = dados.uf().getSigla();
     }
 }

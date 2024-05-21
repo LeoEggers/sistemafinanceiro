@@ -4,38 +4,39 @@ import lombok.Getter;
 
 @Getter
 public enum UnidadeFederativa {
-    AC("Acre"),
-    AL("Alagoas"),
-    AP("Amapá"),
-    AM("Amazonas"),
-    BA("Bahia"),
-    CE("Ceará"),
-    DF("Distrito Federal"),
-    ES("Espírito Santo"),
-    GO("Goiás"),
-    MA("Maranhão"),
-    MT("Mato Grosso"),
-    MS("Mato Grosso do Sul"),
-    MG("Minas Gerais"),
-    PA("Pará"),
-    PB("Paraíba"),
-    PR("Paraná"),
-    PE("Pernambuco"),
-    PI("Piauí"),
-    RJ("Rio de Janeiro"),
-    RN("Rio Grande do Norte"),
-    RS("Rio Grande do Sul"),
-    RO("Rondônia"),
-    RR("Roraima"),
-    SC("Santa Catarina"),
-    SP("São Paulo"),
-    SE("Sergipe"),
-    TO("Tocantins");
+    AC("Acre", "AC"),
+    AL("Alagoas", "AL"),
+    AP("Amapá", "AP"),
+    AM("Amazonas", "AM"),
+    BA("Bahia", "BA"),
+    CE("Ceará", "CE"),
+    DF("Distrito Federal", "DF"),
+    ES("Espírito Santo", "ES"),
+    GO("Goiás", "GO"),
+    MA("Maranhão", "MA"),
+    MT("Mato Grosso", "MT"),
+    MS("Mato Grosso do Sul", "MS"),
+    MG("Minas Gerais", "MG"),
+    PA("Pará", "PA"),
+    PB("Paraíba", "PB"),
+    PR("Paraná", "PR"),
+    PE("Pernambuco", "PE"),
+    PI("Piauí", "PI"),
+    RJ("Rio de Janeiro", "RJ"),
+    RN("Rio Grande do Norte", "RN"),
+    RS("Rio Grande do Sul", "RS"),
+    RO("Rondônia", "RO"),
+    RR("Roraima", "RR"),
+    SC("Santa Catarina", "SC"),
+    SP("São Paulo", "SP"),
+    SE("Sergipe", "SE"),
+    TO("Tocantins", "TO");
 
     private final String nomeCompleto;
+    private final String sigla;
 
-    UnidadeFederativa(String nomeCompleto) {
+    UnidadeFederativa(String nomeCompleto, String sigla) {
         this.nomeCompleto = nomeCompleto;
+        this.sigla = sigla;
     }
-
 }
