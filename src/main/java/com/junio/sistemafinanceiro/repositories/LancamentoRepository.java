@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface LancamentoRepository extends JpaRepository<Lancamento, Long> {
-    List<Lancamento> findAllByAtivoIsTrue();
+    List<Lancamento> findByAtivoTrue();
 
-    Optional<Lancamento> findByIdAndAtivoIsTrue(Long id);
+    Optional<Lancamento> findAtivoById(Long id);
 }

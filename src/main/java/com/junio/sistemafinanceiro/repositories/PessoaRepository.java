@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PessoaRepository extends JpaRepository<Pessoa, Long> {
-    List<Pessoa> findAllByAtivoIsTrue();
+    List<Pessoa> findByAtivoTrue();
 
-    Optional<Pessoa> findByIdAndAtivoIsTrue(Long id);
+    Optional<Pessoa> findAtivoById(Long id);
 }

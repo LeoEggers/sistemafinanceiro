@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
-    List<Categoria> findAllByAtivoIsTrue();
+    List<Categoria> findByAtivoTrue();
 
-    Optional<Categoria> findByIdAndAtivoIsTrue(Long id);
+    Optional<Categoria> findAtivoById(Long id);
 
     boolean existsByNome(String nome);
 }

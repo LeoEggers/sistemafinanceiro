@@ -2,7 +2,6 @@ package com.junio.sistemafinanceiro.entidades.lancamento;
 
 import com.junio.sistemafinanceiro.entidades.categoria.Categoria;
 import com.junio.sistemafinanceiro.service.exceptions.DadoInvalidoException;
-import org.apache.commons.lang3.StringUtils;
 
 import java.time.Instant;
 
@@ -18,25 +17,13 @@ public record DadosAtualizarLancamento(
 ) {
     public DadosAtualizarLancamento {
         // Validação da descrição
-        if (descricao != null) {
-            if (StringUtils.isNotBlank(descricao)) {
-                if (descricao.length() < 3 || descricao.length() > 100) {
-                    throw new DadoInvalidoException("Descrição deve ter entre 3 e 100 caracteres");
-                }
-            } else {
-                throw new DadoInvalidoException("Descrição não pode ser vazia");
-            }
+        if (descricao != null && (descricao.length() < 3 || descricao.length() > 100)) {
+            throw new DadoInvalidoException("Descrição deve ter entre 3 e 100 caracteres");
         }
 
         // Validação da observação
-        if (observacao != null) {
-            if (StringUtils.isNotBlank(observacao)) {
-                if (observacao.length() > 255) {
-                    throw new DadoInvalidoException("Observação deve ter no máximo 255 caracteres");
-                }
-            } else {
-                throw new DadoInvalidoException("Observação não pode ser vazia");
-            }
+        if (observacao != null && observacao.length() > 255) {
+            throw new DadoInvalidoException("Observação deve ter no máximo 255 caracteres");
         }
 
         // Validação do valor

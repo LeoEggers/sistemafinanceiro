@@ -39,11 +39,11 @@ public class LancamentoService {
 
     // Read
     public List<Lancamento> findAllLancamentos() {
-        return lancamentoRepository.findAllByAtivoIsTrue();
+        return lancamentoRepository.findByAtivoTrue();
     }
 
     public Lancamento findLancamentoById(Long id) {
-        Optional<Lancamento> lancamento = lancamentoRepository.findByIdAndAtivoIsTrue(id);
+        Optional<Lancamento> lancamento = lancamentoRepository.findAtivoById(id);
         return lancamento.orElseThrow();
     }
 
@@ -72,7 +72,7 @@ public class LancamentoService {
         if (dados.categoria() != null) {
             lancamento.setCategoria(dados.categoria());
         }
-        if (dados.transacaoConcluida() != null){
+        if (dados.transacaoConcluida() != null) {
             lancamento.setTransacaoConcluida(dados.transacaoConcluida());
             lancamento.setDataConclusao(dados.transacaoConcluida() ? Instant.now() : null);
         }

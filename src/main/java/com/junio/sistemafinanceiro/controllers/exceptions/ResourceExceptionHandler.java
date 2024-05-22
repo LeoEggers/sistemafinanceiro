@@ -25,35 +25,35 @@ public class ResourceExceptionHandler {
     public ResponseEntity<StandardError> handleException(Exception e, HttpServletRequest request) {
 
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
-        String mensagemDeErro = "Internal server error";
+        String mensagem = "Internal server error";
 
         if (e instanceof ResourceNotFoundException) {
             status = HttpStatus.NOT_FOUND;
-            mensagemDeErro = "Recurso não encontrado";
+            mensagem = "Recurso não encontrado";
 
         } else if (e instanceof DatabaseException) {
             status = HttpStatus.BAD_REQUEST;
-            mensagemDeErro = "Violação da Integridade do Banco de Dados";
+            mensagem = "Violação da Integridade do Banco de Dados";
 
         } else if (e instanceof SQLIntegrityConstraintViolationException) {
             status = HttpStatus.BAD_REQUEST;
-            mensagemDeErro = "Violação de restrição de integridade do banco de dados";
+            mensagem = "Violação de restrição de integridade do banco de dados";
 
         } else if (e instanceof DataIntegrityViolationException) {
             status = HttpStatus.BAD_REQUEST;
-            mensagemDeErro = "Violação de integridade de dados";
+            mensagem = "Violação de integridade de dados";
 
         } else if (e instanceof MethodArgumentNotValidException) {
             status = HttpStatus.BAD_REQUEST;
-            mensagemDeErro = "Dados inconsistentes com o formato ou tamanho permitido para a coluna";
+            mensagem = "Dados inconsistentes com o formato ou tamanho permitido para a coluna";
 
         } else if (e instanceof DadoInvalidoException) {
             status = HttpStatus.BAD_REQUEST;
-            mensagemDeErro = "Dados inválidos fornecidos";
+            mensagem = "Dados inválidos fornecidos";
 
         } else if (e instanceof UnexpectedTypeException) {
             status = HttpStatus.BAD_REQUEST;
-            mensagemDeErro = "Tipo de dado inesperado fornecido";
+            mensagem = "Tipo de dado inesperado fornecido";
         }
 
         // Logar o stack trace completo para fins de depuração
@@ -61,8 +61,7 @@ public class ResourceExceptionHandler {
 
         StandardError error = new StandardError(Instant.now(),
                 status.value(),
-                mensagemDeErro, // mensagem de erro amigável
-                null, // não incluir e.getMessage() para evitar exposição de detalhes internos
+                mensagem, // mensagem de erro amigável
                 request.getRequestURI());
 
         return ResponseEntity.status(status).body(error);

@@ -31,14 +31,13 @@ public class CategoriaService {
 
     // Read
     public List<Categoria> findAllCategorias() {
-        return categoriaRepository.findAllByAtivoIsTrue();
+        return categoriaRepository.findByAtivoTrue();
     }
 
     public Categoria findCategoriaById(Long id) {
-        Optional<Categoria> categoria = categoriaRepository.findByIdAndAtivoIsTrue(id);
+        Optional<Categoria> categoria = categoriaRepository.findAtivoById(id);
         return categoria.orElseThrow();
     }
-
 
     // Update
     public Categoria updateCategoria(Long id, DadosAtualizarCategoria dados) {
