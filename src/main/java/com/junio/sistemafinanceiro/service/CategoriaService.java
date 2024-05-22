@@ -42,8 +42,8 @@ public class CategoriaService {
 
     // Update
     public Categoria updateCategoria(Long id, DadosAtualizarCategoria dados) {
-        Categoria categoria = findCategoriaById(id);
-        categoria.atualizarCategoria(dados);
+        var categoria = findCategoriaById(id);
+        categoria.setNome(dados.nome());
         return categoriaRepository.save(categoria);
     }
 

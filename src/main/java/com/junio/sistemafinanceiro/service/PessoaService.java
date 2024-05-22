@@ -35,7 +35,12 @@ public class PessoaService {
     // Update
     public Pessoa updatePessoa(Long id, DadosAtualizarPessoa dados) {
         var pessoa = findPessoaById(id);
-        pessoa.AtualizarPessoa(dados);
+        if (dados.nome() != null) {
+            pessoa.setNome(dados.nome());
+        }
+        if (dados.endereco() != null) {
+            pessoa.setEndereco(dados.endereco());
+        }
         return pessoaRepository.save(pessoa);
     }
 

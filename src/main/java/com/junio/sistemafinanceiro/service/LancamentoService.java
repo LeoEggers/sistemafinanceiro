@@ -9,6 +9,7 @@ import com.junio.sistemafinanceiro.repositories.PessoaRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,7 +50,33 @@ public class LancamentoService {
     // Update
     public Lancamento updateLancamento(Long id, DadosAtualizarLancamento dados) {
         Lancamento lancamento = findLancamentoById(id);
-        lancamento.atualizarLancamento(dados);
+
+        if (dados.descricao() != null) {
+            lancamento.setDescricao(dados.descricao());
+        }
+        if (dados.observacao() != null) {
+            lancamento.setObservacao(dados.observacao());
+        }
+        if (dados.valor() != null) {
+            lancamento.setValor(dados.valor());
+        }
+        if (dados.dataLancamento() != null) {
+            lancamento.setDataLancamento(dados.dataLancamento());
+        }
+        if (dados.dataVencimento() != null) {
+            lancamento.setDataVencimento(dados.dataVencimento());
+        }
+        if (dados.dataConclusao() != null) {
+            lancamento.setDataConclusao(dados.dataConclusao());
+        }
+        if (dados.categoria() != null) {
+            lancamento.setCategoria(dados.categoria());
+        }
+        if (dados.transacaoConcluida() != null){
+            lancamento.setTransacaoConcluida(dados.transacaoConcluida());
+            lancamento.setDataConclusao(dados.transacaoConcluida() ? Instant.now() : null);
+        }
+
         return lancamentoRepository.save(lancamento);
     }
 

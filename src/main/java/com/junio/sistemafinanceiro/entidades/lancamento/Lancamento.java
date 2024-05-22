@@ -5,13 +5,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.junio.sistemafinanceiro.entidades.categoria.Categoria;
 import com.junio.sistemafinanceiro.entidades.lancamento.enums.TipoLancamento;
 import com.junio.sistemafinanceiro.entidades.pessoa.Pessoa;
-import com.junio.sistemafinanceiro.service.exceptions.DadoInvalidoException;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.apache.commons.lang3.StringUtils;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -62,44 +60,5 @@ public class Lancamento {
         this.dataLancamento = Instant.now();
         this.dataVencimento = this.dataLancamento.atZone(ZoneId.systemDefault()).plusDays(dados.diasParaOVencimento()).toInstant();
         this.dataConclusao = dados.transacaoConcluida() ? Instant.now() : null;
-    }
-
-    public void atualizarLancamento(DadosAtualizarLancamento dados){
-        if (StringUtils.isNotBlank(dados.descricao())) {
-            this.setDescricao(dados.descricao());
-        } else if (dados.descricao() != null) {
-            throw new DadoInvalidoException("Descrição não pode ser vazia");
-        }
-
-        if (StringUtils.isNotBlank(dados.observacao())) {
-            this.setObservacao(dados.observacao());
-        } else if (dados.observacao() != null) {
-            throw new DadoInvalidoException("Observação não pode ser vazia");
-        }
-
-        if (dados.valor() != null) {
-            this.setValor(dados.valor());
-        }
-
-        if (dados.dataLancamento() != null) {
-            this.setDataLancamento(dados.dataLancamento());
-        }
-
-        if (dados.dataVencimento() != null) {
-            this.setDataVencimento(dados.dataVencimento());
-        }
-
-        if (dados.dataConclusao() != null) {
-            this.setDataConclusao(dados.dataConclusao());
-        }
-
-        if (dados.categoria() != null) {
-            this.setCategoria(dados.categoria());
-        }
-
-        if (dados.transacaoConcluida() != null){
-            this.setTransacaoConcluida(dados.transacaoConcluida());
-            this.dataConclusao = this.transacaoConcluida ? Instant.now() : null;
-        }
     }
 }
