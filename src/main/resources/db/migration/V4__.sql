@@ -1,8 +1,0 @@
-ALTER TABLE usuarios
-    MODIFY login VARCHAR (255);
-
-ALTER TABLE usuarios
-    MODIFY login VARCHAR (255) NULL;
-
-ALTER TABLE usuarios
-    MODIFY senha VARCHAR (255) NULL;
